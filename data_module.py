@@ -302,59 +302,6 @@ class PromptDataset(Dataset):
         example["index"] = index
         return example
 
-if __name__ == "__main__":
-    # Create dataset instance with the updated parameters:
-    dataset = KontextDataset(
-        dataset_name="raresense/Viton",
-        target_column_name="source",
-        source_column_name="target",
-        caption_column_name="ai_name",
-    )
-    
-    # Print dataset length
-    print(f"Dataset size: {len(dataset)}")
-    
-    # Get first sample
-    print("Loading first sample...")
-    sample = dataset[0]
-    
-    # Print tensor shapes
-    print("\nTensor shape of concatenated image:")
-    print(f"Target image: {sample['target_image'].shape}")
-    print(f"Mask: {sample['mask'].shape}")
-    
-    # Print prompts (truncated if too long)
-    prompts = sample["prompts"]
-    if len(prompts) > 100:
-        prompts = prompts[:100] + "..."
-    print(f"\nCaption: {prompts}")
-
-    # Create and test DataLoader with custom collate function
-    batch_size = 4
-    dataloader = DataLoader(
-        dataset, 
-        batch_size=batch_size,
-        shuffle=True,
-        collate_fn=collate_fn
-    )
-    
-    print("\nTesting batch processing:")
-    print(f"Getting first batch of size {batch_size}...")
-    batch = next(iter(dataloader))
-    
-    # Print tensor shapes for batch
-    print("Tensor shapes for batch:")
-    print(f"Target images: {batch['target_image'].shape}")
-    print(f"Masks: {batch['mask'].shape}")
-    print(f"Sources: {batch['source_image'].shape}")
-    print(f"Number of captions: {len(batch['prompts'])}")
-    
-    # Print first prompts in batch
-    first_caption = batch['prompts'][0]
-    if len(first_caption) > 100:
-        first_caption = first_caption
-    print(f"First prompts in batch: {first_caption}")
-
 # -------------------------------------------------------------------------------------------------------
 # This is a modified version of the DreamBoothDataset2 class to handle split train and test dataset for Hugging Face datasets.
 class DreamBoothDataset2(Dataset):
@@ -447,3 +394,57 @@ class DreamBoothDataset2(Dataset):
             "instance_masks": mask,
             "instance_prompt": prompt,
         }
+
+if __name__ == "__main__":
+    # Create dataset instance with the updated parameters:
+    dataset = KontextDataset(
+        dataset_name="raresense/Viton",
+        target_column_name="source",
+        source_column_name="target",
+        caption_column_name="ai_name",
+    )
+    
+    # Print dataset length
+    print(f"Dataset size: {len(dataset)}")
+    
+    # Get first sample
+    print("Loading first sample...")
+    sample = dataset[0]
+    
+    # Print tensor shapes
+    print("\nTensor shape of concatenated image:")
+    print(f"Target image: {sample['target_image'].shape}")
+    print(f"Mask: {sample['mask'].shape}")
+    
+    # Print prompts (truncated if too long)
+    prompts = sample["prompts"]
+    if len(prompts) > 100:
+        prompts = prompts[:100] + "..."
+    print(f"\nCaption: {prompts}")
+
+    # Create and test DataLoader with custom collate function
+    batch_size = 4
+    dataloader = DataLoader(
+        dataset, 
+        batch_size=batch_size,
+        shuffle=True,
+        collate_fn=collate_fn
+    )
+    
+    print("\nTesting batch processing:")
+    print(f"Getting first batch of size {batch_size}...")
+    batch = next(iter(dataloader))
+    
+    # Print tensor shapes for batch
+    print("Tensor shapes for batch:")
+    print(f"Target images: {batch['target_image'].shape}")
+    print(f"Masks: {batch['mask'].shape}")
+    print(f"Sources: {batch['source_image'].shape}")
+    print(f"Number of captions: {len(batch['prompts'])}")
+    
+    # Print first prompts in batch
+    first_caption = batch['prompts'][0]
+    if len(first_caption) > 100:
+        first_caption = first_caption
+    print(f"First prompts in batch: {first_caption}")
+
